@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Landing in Kenya: Practical Hotdesk session with ABC Expat</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; min-height: 100vh; padding: 24px 16px; }
+  .app { max-width: 660px; margin: 0 auto; background: #fff; border-radius: 16px; border: 1px solid #e5e5e5; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+  .header { display: flex; align-items: center; gap: 14px; padding: 1.25rem 1.5rem; border-bottom: 1px solid #eee; background: #fff; }
+  .logo-circle { width: 50px; height: 50px; border-radius: 50%; background: #003087; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-inner { text-align: center; }
+  .logo-inner .ccif { font-size: 9px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+  .logo-inner .kenya { font-size: 7px; color: #c9a84c; letter-spacing: 0.3px; }
+  .logo-flag { display: flex; height: 6px; width: 28px; border-radius: 1px; overflow: hidden; margin: 2px auto; }
+  .flag-blue { background: #002395; flex: 1; }
+  .flag-white { background: #fff; flex: 1; }
+  .flag-red { background: #ED2939; flex: 1; }
+  .header-text h1 { font-size: 15px; font-weight: 700; color: #1a1a1a; line-height: 1.3; }
+  .header-text p { font-size: 12px; color: #888; margin-top: 3px; }
+
+  .event-banner { background: #eef2ff; border-bottom: 1px solid #c7d2fe; padding: 10px 1.5rem; display: flex; gap: 20px; flex-wrap: wrap; }
+  .event-info { font-size: 12px; color: #3730a3; display: flex; align-items: center; gap: 6px; }
+
+  .section { padding: 1.25rem 1.5rem; }
+  .section-title { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+
+  .slots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .slot-card { border: 1.5px solid #e5e5e5; border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.15s; background: #fff; user-select: none; }
+  .slot-card:hover:not(.full) { border-color: #003087; background: #f8faff; }
+  .slot-card.selected { border-color: #003087; border-width: 2px; background: #eef2ff; }
+  .slot-card.full { opacity: 0.4; cursor: not-allowed; background: #fafafa; }
+  .slot-time { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+  .slot-badge { display: inline-block; margin-top: 6px; font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 500; }
+  .slot-badge.avail { background: #dcfce7; color: #166534; }
+  .slot-badge.full-b { background: #fee2e2; color: #991b1b; }
+
+  .booking-form { border-top: 1px solid #eee; padding: 1.25rem 1.5rem; }
+  .selected-pill { display: inline-flex; align-items: center; gap: 6px; background: #eef2ff; color: #3730a3; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .form-group { margin-bottom: 13px; }
+  .form-group label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; font-weight: 500; }
+  .form-group input { width: 100%; font-size: 14px; padding: 10px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-family: inherit; color: #1a1a1a; transition: border-color 0.15s; }
+  .form-group input:focus { outline: none; border-color: #003087; background: #fafcff; }
+
+  .confirm-btn { width: 100%; padding: 13px; border-radius: 10px; background: #e5e5e5; color: #999; border: none; font-size: 14px; font-weight: 600; cursor: not-allowed; font-family: inherit; transition: all 0.2s; letter-spacing: 0.1px; }
+  .confirm-btn.ready { background: #003087; color: #fff; cursor: pointer; }
+  .confirm-btn.ready:hover { background: #002470; transform: translateY(-1px); }
+  .confirm-btn.loading { background: #6b7280; color: #fff; cursor: wait; }
+
+  .success-box { padding: 2.5rem 1.5rem; text-align: center; }
+  .success-icon { width: 60px; height: 60px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 28px; }
+  .success-box h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+  .success-box .sub { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 20px; }
+  .booking-summary { background: #f9fafb; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: left; margin-bottom: 16px; }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .lbl { color: #888; }
+  .summary-row .val { font-weight: 600; color: #1a1a1a; }
+  .cancel-lnk { font-size: 12px; color: #dc2626; background: none; border: none; cursor: pointer; font-family: inherit; text-decoration: underline; }
+
+  .loading-state { padding: 3rem 1.5rem; text-align: center; }
+  .spinner { width: 28px; height: 28px; border: 2.5px solid #eee; border-top-color: #003087; border-radius: 50%; animation: spin 0.75s linear infinite; margin: 0 auto 14px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-state p { font-size: 13px; color: #888; }
+
+  .error-banner { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin: 1rem 1.5rem; font-size: 13px; color: #991b1b; display: none; line-height: 1.6; }
+
+  .footer { padding: 14px 1.5rem; border-top: 1px solid #eee; text-align: center; font-size: 11px; color: #bbb; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo-circle">
+      <div class="logo-inner">
+        <div class="ccif">CCIF</div>
+        <div class="logo-flag"><div class="flag-blue"></div><div class="flag-white"></div><div class="flag-red"></div></div>
+        <div class="kenya">KENYA</div>
+      </div>
+    </div>
+    <div class="header-text">
+      <h1>Landing in Kenya: Practical Hotdesk session with ABC Expat</h1>
+      <p>French Chamber of Commerce Kenya</p>
+    </div>
+  </div>
+
+  <div class="event-banner">
+    <div class="event-info">&#128197; <strong>21 May 2026</strong>&nbsp;&middot;&nbsp;ABC Expat offices, Nairobi</div>
+    <div class="event-info">&#9200; 30-min consultation slots &middot; Max 3 members per slot</div>
+  </div>
+
+  <div id="errorBanner" class="error-banner"></div>
+
+  <div id="loadingState" class="loading-state">
+    <div class="spinner"></div>
+    <p>Checking availability...</p>
+  </div>
+
+  <div id="mainUI" style="display:none;">
+
+    <div id="successBox" class="success-box" style="display:none;">
+      <div class="success-icon">&#10003;</div>
+      <h2>You're booked!</h2>
+      <p class="sub">Your consultation slot is confirmed.<br>See you on 21 May 2026 at the ABC Expat offices.</p>
+      <div class="booking-summary">
+        <div class="summary-row"><span class="lbl">Name</span><span class="val" id="cName"></span></div>
+        <div class="summary-row"><span class="lbl">Company</span><span class="val" id="cCompany"></span></div>
+        <div class="summary-row"><span class="lbl">Time slot</span><span class="val" id="cSlot"></span></div>
+        <div class="summary-row"><span class="lbl">Date</span><span class="val">21 May 2026</span></div>
+      </div>
+      <button class="cancel-lnk" id="cancelBtn" onclick="cancelBooking()">Cancel my booking (deadline: 19 May 2026)</button>
+    </div>
+
+    <div id="bookingUI">
+      <div class="section">
+        <div class="section-title">Choose your time slot</div>
+        <div class="slots-grid" id="slotsGrid"></div>
+      </div>
+
+      <div class="booking-form" id="bookingForm" style="display:none;">
+        <div class="section-title">Your details</div>
+        <div class="selected-pill" id="selectedPill">&#128337; </div>
+        <div class="form-group">
+          <label>Full name *</label>
+          <input type="text" id="fname" placeholder="e.g. Jean Dupont" oninput="checkForm()" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label>Email address *</label>
+          <input type="email" id="femail" placeholder="e.g. jean.dupont@company.com" oninput="checkForm()" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label>Company *</label>
+          <input type="text" id="fcompany" placeholder="e.g. Dupont &amp; Associates" oninput="checkForm()" autocomplete="organization" />
+        </div>
+        <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">Select a slot to continue</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">French Chamber of Commerce Kenya &middot; Hotdesk powered by CCIF Kenya</div>
+</div>
+
+<script>
+  const GS_URL = 'https://script.google.com/macros/s/AKfycbyQJr6k7EXYiS6vQqZhdNjkJZq_PtNScymMsqXto9k1PjZto3PXZG-RNrHcQgqxeC_2/exec';
+  const MAX = 3;
+  const CANCEL_DEADLINE = new Date('2026-05-19T23:59:59');
+  const SLOTS = [
+    '8:30 - 9:00 AM', '9:00 - 9:30 AM', '9:30 - 10:00 AM', '10:00 - 10:30 AM',
+    '10:30 - 11:00 AM', '11:00 - 11:30 AM', '11:30 AM - 12:00 PM', '12:00 - 12:30 PM'
+  ];
+
+  let bookings = [], selectedSlot = null, myBooking = null, cbCount = 0;
+
+  function jsonp(params) {
+    return new Promise((resolve, reject) => {
+      const cb = '_gs' + (++cbCount);
+      const timer = setTimeout(() => { cleanup(); reject(new Error('Request timed out')); }, 12000);
+      function cleanup() { delete window[cb]; const s = document.getElementById(cb); if (s) s.remove(); }
+      window[cb] = data => { clearTimeout(timer); cleanup(); resolve(data); };
+      const qs = Object.entries({ ...params, callback: cb }).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+      const s = document.createElement('script');
+      s.id = cb;
+      s.src = GS_URL + '?' + qs;
+      s.onerror = () => { clearTimeout(timer); cleanup(); reject(new Error('Could not reach Google Sheets. Check your Apps Script deployment.')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function showError(msg) {
+    const b = document.getElementById('errorBanner');
+    b.textContent = '⚠ ' + msg;
+    b.style.display = 'block';
+    setTimeout(() => { b.style.display = 'none'; }, 6000);
+  }
+
+  function slotCount(s) { return bookings.filter(b => b.slot === s).length; }
+
+  function renderSlots() {
+    const g = document.getElementById('slotsGrid');
+    g.innerHTML = '';
+    SLOTS.forEach(s => {
+      const cnt = slotCount(s), full = cnt >= MAX;
+      const d = document.createElement('div');
+      d.className = 'slot-card' + (full ? ' full' : '') + (selectedSlot === s ? ' selected' : '');
+      d.innerHTML = `<div class="slot-time">${s}</div>
+        <span class="slot-badge ${full ? 'full-b' : 'avail'}">${full ? 'Full' : (MAX - cnt) + ' spot' + (MAX - cnt === 1 ? '' : 's')}</span>`;
+      if (!full) d.onclick = () => pickSlot(s);
+      g.appendChild(d);
+    });
+  }
+
+  function pickSlot(s) {
+    selectedSlot = s;
+    renderSlots();
+    document.getElementById('bookingForm').style.display = 'block';
+    document.getElementById('selectedPill').innerHTML = '&#128337; ' + s;
+    checkForm();
+    document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function checkForm() {
+    const n = document.getElementById('fname').value.trim();
+    const e = document.getElementById('femail').value.trim();
+    const c = document.getElementById('fcompany').value.trim();
+    const btn = document.getElementById('confirmBtn');
+    if (n && e && c && selectedSlot) {
+      btn.className = 'confirm-btn ready';
+      btn.textContent = 'Confirm my booking';
+    } else {
+      btn.className = 'confirm-btn';
+      btn.textContent = selectedSlot ? 'Fill in your details to continue' : 'Select a slot to continue';
+    }
+  }
+
+  async function confirmBooking() {
+    const n = document.getElementById('fname').value.trim();
+    const e = document.getElementById('femail').value.trim();
+    const c = document.getElementById('fcompany').value.trim();
+    if (!n || !e || !c || !selectedSlot) return;
+
+    const btn = document.getElementById('confirmBtn');
+    btn.className = 'confirm-btn loading';
+    btn.textContent = 'Saving your booking...';
+
+    try {
+      await jsonp({ action: 'write', name: n, email: e, company: c, slot: selectedSlot });
+    } catch (err) {
+      showError(err.message);
+      btn.className = 'confirm-btn ready';
+      btn.textContent = 'Confirm my booking';
+      return;
+    }
+
+    myBooking = { name: n, email: e, company: c, slot: selectedSlot };
+    bookings.push(myBooking);
+
+    document.getElementById('bookingUI').style.display = 'none';
+    document.getElementById('cName').textContent = n;
+    document.getElementById('cCompany').textContent = c;
+    document.getElementById('cSlot').textContent = selectedSlot;
+    document.getElementById('successBox').style.display = 'block';
+    document.getElementById('cancelBtn').style.display = new Date() < CANCEL_DEADLINE ? 'inline' : 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function cancelBooking() {
+    if (!myBooking || !confirm('Are you sure you want to cancel your booking?')) return;
+    try {
+      await jsonp({ action: 'cancel', email: myBooking.email, slot: myBooking.slot });
+    } catch (err) { showError(err.message); return; }
+    bookings = bookings.filter(b => !(b.email === myBooking.email && b.slot === myBooking.slot));
+    myBooking = null; selectedSlot = null;
+    document.getElementById('successBox').style.display = 'none';
+    document.getElementById('bookingUI').style.display = 'block';
+    document.getElementById('bookingForm').style.display = 'none';
+    renderSlots();
+  }
+
+  async function init() {
+    try {
+      const rows = await jsonp({ action: 'read' });
+      bookings = [];
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][5]) === 'true') continue;
+        bookings.push({ name: rows[i][1], email: rows[i][2], company: rows[i][3], slot: rows[i][4] });
+      }
+    } catch (err) {
+      showError('Could not load current availability. ' + err.message);
+    }
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('mainUI').style.display = 'block';
+    renderSlots();
+  }
+
+  init();
+</script>
+</body>
+</html>
